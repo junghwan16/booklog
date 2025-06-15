@@ -7,22 +7,24 @@ from .views import (
     verify_views,
 )
 
+app_name = "account"
+
 urlpatterns = [
-    # Authentication
+    # AUTH
     path("login/", auth_views.login_view, name="login"),
     path("logout/", auth_views.logout_view, name="logout"),
     path("signup/", register_views.register_view, name="register"),
-    # Email verification
+    # EMAIL VERIFICATION
     path("email/verify/<str:token>/", verify_views.verify_view, name="verify"),
     path(
         "email/verification-needed/",
         verify_views.verification_required_view,
         name="verification_required",
     ),
-    # User profile
+    # USER PROFILE
     path("profile/", profile_views.profile_view, name="profile"),
     path("profile/delete/", profile_views.delete_account_view, name="delete_account"),
-    # Password management
+    # PASSWORD MANAGEMENT
     path("password/change/", password_views.change_view, name="change_password"),
     path("password/forgot/", password_views.request_reset_view, name="password_reset"),
     path(

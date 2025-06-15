@@ -45,7 +45,7 @@ def login_view(request: HttpRequest):
                 _session_manager.login(request, account.id)
 
                 if not account.is_email_verified:
-                    return redirect("verification_required")
+                    return redirect("account:verification_required")
 
                 return redirect(next_url)
             except InvalidCredentials:

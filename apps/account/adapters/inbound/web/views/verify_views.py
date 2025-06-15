@@ -36,10 +36,10 @@ _resend_verification_email_service = ResendVerificationEmailService(
 def verify_view(request: HttpRequest, token: str):
     try:
         _verify_email_service.execute(token)
-        messages.success(request, "이메일 인증이 완료되었습니다. 로그인해 주세요.")
+        return render(request, "account/email_verified.html")
     except InvalidTokenError:
         messages.error(request, "유효하지 않거나 만료된 토큰입니다.")
-    return redirect("login")
+        return redirect("account:login")
 
 
 @login_required
@@ -56,7 +56,7 @@ def verification_required_view(request: HttpRequest):
         except UserNotFoundError:
             # Should not happen for a logged-in user
             messages.error(request, "사용자를 찾을 수 없습니다.")
-        return redirect("verification_required")
+        return redirect("account:verification_required")
 
     return render(request, "account/verification_required.html")
 
@@ -74,7 +74,7 @@ def resend_verification_email_view(request: HttpRequest):
                 )
             except UserNotFoundError:
                 messages.error(request, "해당 이메일로 가입된 계정을 찾을 수 없습니다.")
-            return redirect("login")
+            return redirect("account:login")
     else:
         form = ResendVerificationEmailForm()
     return render(request, "account/resend_verification_email.html", {"form": form})

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}내 서재{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>내 서재</h2>
+        <div>
+            <a href="{% url 'book:add_book' %}" class="btn btn-primary">새 책 추가</a>
+            <a href="{% url 'book:dashboard' %}" class="btn btn-outline-secondary">대시보드</a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <p class="text-muted mb-4">총 {{ total_books }}권</p>
+
+    <!-- 읽을 책 -->
+    <div class="mb-4">
+        <h4>읽을 책 ({{ to_read_books|length }}권)</h4>
+        {% if to_read_books %}
+            <div class="row">
+                {% for book in to_read_books %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ book.title }}</h6>
+                                <p class="card-text text-muted">{{ book.author }}</p>
+                                <p class="card-text"><small>{{ book.total_pages }}페이지</small></p>
+                                <form method="post" action="{% url 'book:start_reading' %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="btn btn-sm btn-success">읽기 시작</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">읽을 책이 없습니다.</p>
+        {% endif %}
+    </div>
+
+    <!-- 읽는 중 -->
+    <div class="mb-4">
+        <h4>읽는 중 ({{ reading_books|length }}권)</h4>
+        {% if reading_books %}
+            <div class="row">
+                {% for book in reading_books %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ book.title }}</h6>
+                                <p class="card-text text-muted">{{ book.author }}</p>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ book.progress_percentage }}%">
+                                        {{ book.progress_percentage|floatformat:0 }}%
+                                    </div>
+                                </div>
+                                <p class="card-text">
+                                    <small>{{ book.current_page }} / {{ book.total_pages }}페이지</small>
+                                </p>
+                                <form method="post" action="{% url 'book:update_progress' %}" class="d-flex">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <input type="number" name="current_page" 
+                                           class="form-control form-control-sm me-2" 
+                                           placeholder="현재 페이지" 
+                                           min="0" max="{{ book.total_pages }}"
+                                           value="{{ book.current_page }}">
+                                    <button type="submit" class="btn btn-sm btn-primary">업데이트</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">읽고 있는 책이 없습니다.</p>
+        {% endif %}
+    </div>
+
+    <!-- 완독한 책 -->
+    <div class="mb-4">
+        <h4>완독 ({{ finished_books|length }}권)</h4>
+        {% if finished_books %}
+            <div class="row">
+                {% for book in finished_books %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ book.title }}</h6>
+                                <p class="card-text text-muted">{{ book.author }}</p>
+                                <p class="card-text">
+                                    <small class="text-success">{{ book.total_pages }}페이지 완독</small>
+                                </p>
+                                <span class="badge bg-success">완독</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">완독한 책이 없습니다.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

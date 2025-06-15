@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}새 책 추가{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>새 책 추가</h2>
+    <p>읽고 싶은 책의 정보를 입력해주세요.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="row g-3">
+        {% csrf_token %}
+        
+        <div class="col-md-6">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {% if form.title.errors %}
+                <div class="text-danger">
+                    {% for error in form.title.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-6">
+            {{ form.author.label_tag }}
+            {{ form.author }}
+            {% if form.author.errors %}
+                <div class="text-danger">
+                    {% for error in form.author.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            {{ form.total_pages.label_tag }}
+            {{ form.total_pages }}
+            {% if form.total_pages.errors %}
+                <div class="text-danger">
+                    {% for error in form.total_pages.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            {{ form.publisher.label_tag }}
+            {{ form.publisher }}
+            {% if form.publisher.errors %}
+                <div class="text-danger">
+                    {% for error in form.publisher.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            {{ form.isbn.label_tag }}
+            {{ form.isbn }}
+            {% if form.isbn.errors %}
+                <div class="text-danger">
+                    {% for error in form.isbn.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">책 추가</button>
+            <a href="{% url 'book:library' %}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

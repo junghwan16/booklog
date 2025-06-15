@@ -74,7 +74,7 @@ def request_reset_view(request: HttpRequest):
             cmd = RequestPasswordResetCommand(email=form.cleaned_data["email"])
             _request_password_reset_service.execute(cmd)
             messages.info(request, "재설정 메일을 확인해 주세요.")
-            return redirect("login")
+            return redirect("account:login")
     else:
         form = ResetPasswordRequestForm()
     return render(request, "account/password_reset_request.html", {"form": form})
@@ -88,7 +88,7 @@ def reset_view(request: HttpRequest, uidb64: str, token: str):
 
     if user_id is None:
         messages.error(request, "사용자를 찾을 수 없습니다.")
-        return redirect("password_reset")
+        return redirect("account:password_reset")
 
     if request.method == "POST":
         form = ResetPasswordForm(request.POST)
@@ -103,10 +103,10 @@ def reset_view(request: HttpRequest, uidb64: str, token: str):
                 messages.success(
                     request, "새 비밀번호가 설정되었습니다. 로그인해 주세요."
                 )
-                return redirect("login")
+                return redirect("account:login")
             except InvalidTokenError:
                 messages.error(request, "토큰이 유효하지 않거나 만료되었습니다.")
-                return redirect("password_reset")
+                return redirect("account:password_reset")
     else:
         form = ResetPasswordForm()
     return render(request, "account/password_reset_form.html", {"form": form})

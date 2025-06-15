@@ -10,14 +10,14 @@
         <a href="{% url 'home' %}">BookLog</a>
         {% if user.is_authenticated %}
           | {{ user.username }}님
-          | <a href="{% url 'profile' %}">프로필</a>
+          | <a href="{% url 'account:profile' %}">프로필</a>
           {% if not user.is_email_verified %}
-            | <a href="{% url 'verification_required' %}">이메일 인증</a>
+            | <a href="{% url 'account:verification_required' %}">이메일 인증</a>
           {% endif %}
-          | <a href="{% url 'logout' %}">로그아웃</a>
+          | <a href="{% url 'account:logout' %}">로그아웃</a>
         {% else %}
-          | <a href="{% url 'login' %}">로그인</a>
-          | <a href="{% url 'register' %}">회원가입</a>
+          | <a href="{% url 'account:login' %}">로그인</a>
+          | <a href="{% url 'account:register' %}">회원가입</a>
         {% endif %}
       </nav>
     </header>

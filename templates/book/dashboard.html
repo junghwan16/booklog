@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}독서 대시보드{% endblock %}
+
+{% block content %}
+<h1>독서 대시보드</h1>
+
+<div style="margin-bottom: 2rem;">
+    <h2>나의 독서 현황</h2>
+    <table>
+        <tr>
+            <td style="padding-right: 1rem;">읽을 책</td>
+            <td>{{ stats.to_read_count }}권</td>
+        </tr>
+        <tr>
+            <td style="padding-right: 1rem;">읽는 중</td>
+            <td>{{ stats.reading_count }}권</td>
+        </tr>
+        <tr>
+            <td style="padding-right: 1rem;">완독</td>
+            <td>{{ stats.finished_count }}권</td>
+        </tr>
+        <tr>
+            <td style="padding-right: 1rem;"><strong>전체</strong></td>
+            <td><strong>{{ stats.total_books }}권</strong></td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <h2>{{ year }}년 독서 잔디</h2>
+    {% if calendar_data %}
+    <style>
+        .calendar-grid { display: grid; grid-template-columns: repeat(53, 20px); grid-template-rows: repeat(7, 20px); grid-auto-flow: column; grid-gap: 2px; }
+        .day { background-color: #ebedf0; }
+        .day[data-level='1'] { background-color: #9be9a8; }
+        .day[data-level='2'] { background-color: #40c463; }
+        .day[data-level='3'] { background-color: #30a14e; }
+        .day[data-level='4'] { background-color: #216e39; }
+    </style>
+    <div class="calendar-grid">
+    {% for item in calendar_data %}
+        <div class="day" data-level="{{ item.level }}" title="{{ item.date }}: {{ item.pages }} 페이지 읽음"></div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p>아직 독서 기록이 없습니다. 첫 기록을 시작해보세요!</p>
+    {% endif %}
+</div>
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'book:library' %}">내 서재 가기</a> | <a href="{% url 'book:add_book' %}">새 책 추가하기</a>
+</div>
+{% endblock %} 

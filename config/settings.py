@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Local
     "apps.account",
+    "apps.book",
 ]
 
 MIDDLEWARE = [
@@ -84,6 +86,7 @@ DATABASES = {
 # 명시적으로 마이그레이션 파일 위치 지정
 MIGRATION_MODULES = {
     "account": "apps.account.adapters.outbound.persistence.migrations",
+    "book": "apps.book.adapters.outbound.persistence.migrations",
 }
 
 
@@ -137,3 +140,6 @@ AUTH_USER_MODEL = "account.AccountModel"
 # SMTP
 # See: https://docs.djangoproject.com/en/5.2/topics/email/#obtaining-an-instance-of-an-email-backend
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Site URL configuration
+SITE_URL = os.environ.get("SITE_URL", "http://localhost:8000")

@@ -37,7 +37,7 @@ def register_view(request: HttpRequest):
                     request,
                     "가입 완료! 인증 메일을 확인해 주세요.",
                 )
-                return redirect("login")
+                return redirect("account:login")
             except DuplicateEmailError:
                 form.add_error("email", "이미 가입된 이메일입니다.")
     else:
