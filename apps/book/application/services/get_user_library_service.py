@@ -12,4 +12,4 @@ class GetUserLibraryService(GetUserLibraryUseCase):
         self._user_book_repo = user_book_repo
 
     def execute(self, query: GetUserLibraryQuery) -> List[UserBook]:
-        return self._user_book_repo.get_all_for_user(query.user_id) 
+        return self._user_book_repo.get_all_for_user(query.user_id)

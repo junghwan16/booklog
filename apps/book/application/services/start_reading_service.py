@@ -15,13 +15,13 @@ class StartReadingService(StartReadingUseCase):
 
     def execute(self, cmd: StartReadingCommand) -> None:
         # Command validation is handled in __post_init__
-        
+
         user_book = self._user_book_repo.get_by_id(cmd.book_id)
         if not user_book:
             raise BookNotFoundError(cmd.book_id)
-        
+
         if user_book.user_id != cmd.user_id:
             raise UnauthorizedBookAccessError(cmd.user_id, cmd.book_id)
 
         user_book.start_reading()
-        self._user_book_repo.save(user_book) 
+        self._user_book_repo.save(user_book)

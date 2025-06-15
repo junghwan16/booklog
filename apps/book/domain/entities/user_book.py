@@ -15,22 +15,22 @@ class UserBookStatus(Enum):
 @dataclass
 class UserBook:
     """사용자가 직접 입력한 책"""
-    
+
     # 책 정보 (사용자가 직접 입력)
     title: str
     author: str
     total_pages: int
-    
+
     # 사용자 관련 정보
     user_id: str
     status: UserBookStatus = UserBookStatus.TO_READ
     current_page: int = 0
-    
+
     # 메타데이터
     id: str = field(default_factory=lambda: str(uuid.uuid4()), kw_only=True)
     created_at: Optional[datetime] = field(default=None, kw_only=True)
     updated_at: Optional[datetime] = field(default=None, kw_only=True)
-    
+
     # 선택적 정보
     publisher: Optional[str] = field(default=None, kw_only=True)
     isbn: Optional[str] = field(default=None, kw_only=True)
@@ -64,9 +64,9 @@ class UserBook:
             raise ValueError("Current page cannot be negative.")
         if current_page > self.total_pages:
             raise ValueError("Current page cannot exceed total pages.")
-        
+
         self.current_page = current_page
-        
+
         # 자동으로 상태 업데이트
         if current_page >= self.total_pages:
             self.status = UserBookStatus.FINISHED

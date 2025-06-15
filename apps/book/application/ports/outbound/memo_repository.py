@@ -4,7 +4,6 @@ from apps.book.domain.entities import Memo
 
 
 class MemoRepository(abc.ABC):
-
     @abc.abstractmethod
     def save(self, memo: Memo) -> Memo:
         raise NotImplementedError

@@ -22,6 +22,6 @@ class AddBookService(AddBookUseCase):
             isbn=cmd.isbn,
             cover_image_url=cmd.cover_image_url,
         )
-        
+
         saved_book = self._user_book_repo.save(user_book)
-        return saved_book.id 
+        return saved_book.id

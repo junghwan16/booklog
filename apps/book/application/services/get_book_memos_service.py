@@ -18,8 +18,8 @@ class GetBookMemosService(GetBookMemosUseCase):
         user_book = self._user_book_repo.get_by_id(query.book_id)
         if not user_book:
             raise ValueError("책을 찾을 수 없습니다.")
-        
+
         if user_book.user_id != query.user_id:
             raise ValueError("권한이 없습니다.")
 
-        return self._memo_repo.get_by_book_id(query.book_id) 
+        return self._memo_repo.get_by_book_id(query.book_id)

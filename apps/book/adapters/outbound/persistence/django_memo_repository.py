@@ -27,7 +27,7 @@ class DjangoMemoRepository(MemoRepository):
                 content=memo.content,
                 page_number=memo.page_number,
             )
-        
+
         return self._to_entity(memo_model)
 
     def get_by_id(self, memo_id: str) -> Optional[Memo]:
@@ -38,7 +38,9 @@ class DjangoMemoRepository(MemoRepository):
             return None
 
     def get_by_book_id(self, book_id: str) -> List[Memo]:
-        memo_models = MemoModel.objects.filter(book_id=book_id).order_by('page_number', 'created_at')
+        memo_models = MemoModel.objects.filter(book_id=book_id).order_by(
+            "page_number", "created_at"
+        )
         return [self._to_entity(model) for model in memo_models]
 
     def delete(self, memo_id: str) -> None:
@@ -52,4 +54,4 @@ class DjangoMemoRepository(MemoRepository):
             content=model.content,
             page_number=model.page_number,
             created_at=model.created_at,
-        ) 
+        )

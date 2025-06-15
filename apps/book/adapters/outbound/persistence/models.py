@@ -13,23 +13,23 @@ from apps.book.domain.entities import (
 class UserBookModel(models.Model):
     id = models.CharField(max_length=100, primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    
+
     # 책 정보 (사용자가 직접 입력)
     title = models.CharField(max_length=500)
     author = models.CharField(max_length=200)
     total_pages = models.PositiveIntegerField()
-    
+
     # 선택적 책 정보
     publisher = models.CharField(max_length=200, blank=True, null=True)
     isbn = models.CharField(max_length=20, blank=True, null=True)
     cover_image_url = models.URLField(max_length=500, blank=True, null=True)
-    
+
     # 독서 상태
     status = models.CharField(
         max_length=20, choices=[(s.name, s.value) for s in UserBookStatus]
     )
     current_page = models.PositiveIntegerField(default=0)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
