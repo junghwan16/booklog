@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}이메일 인증 필요{% endblock %}
+
+{% block content %}
+<h2>이메일 인증 필요</h2>
+<p>
+    서비스를 이용하려면 이메일 인증을 완료해야 합니다.
+    가입 시 입력한 이메일 주소({{ user.email }})로 인증 메일을 보냈습니다.
+</p>
+<p>메일을 받지 못하셨다면 아래 버튼을 눌러 다시 요청해 주세요.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">인증 메일 다시 보내기</button>
+</form>
+{% endblock %} 

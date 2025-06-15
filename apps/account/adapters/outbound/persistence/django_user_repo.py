@@ -70,3 +70,11 @@ class DjangoUserRepository(UserRepository):
         except ObjectDoesNotExist:
             # Should not happen in normal flow, but handle defensively
             raise ValueError("User with given id does not exist")
+
+    def delete(self, user_id: int) -> None:
+        try:
+            model = AccountModel.objects.get(id=user_id)
+            model.delete()
+        except ObjectDoesNotExist:
+            # User already deleted or doesn't exist
+            pass

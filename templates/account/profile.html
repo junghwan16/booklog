@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}프로필{% endblock %}
+
+{% block content %}
+<h2>프로필</h2>
+
+<h3>계정 정보</h3>
+<p><strong>이메일:</strong> {{ account.email }}</p>
+<p><strong>닉네임:</strong> {{ account.nickname }}</p>
+<p><strong>이메일 인증:</strong> 
+    {% if account.is_email_verified %}
+        인증됨
+    {% else %}
+        미인증
+    {% endif %}
+</p>
+
+<h3>프로필 수정</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">프로필 업데이트</button>
+</form>
+
+<h3>계정 관리</h3>
+<p><a href="{% url 'change_password' %}">비밀번호 변경</a></p>
+
+<hr>
+<h3>위험 구역</h3>
+<p>계정을 삭제하면 모든 데이터가 영구적으로 삭제되며 복구할 수 없습니다.</p>
+<p>
+    <a href="{% url 'delete_account' %}" 
+       onclick="return confirm('정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')">
+        회원 탈퇴
+    </a>
+</p>
+{% endblock %} 

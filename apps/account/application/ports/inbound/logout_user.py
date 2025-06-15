@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from django.http import HttpRequest
+from typing import Any
 
 
 class LogoutUserUseCase(ABC):
     @abstractmethod
-    def execute(self, request: HttpRequest) -> None: ...
+    def execute(self, request: Any) -> None: ...

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,5 +131,9 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Using Django's default User model with custom extensions
+# Custom User model
 AUTH_USER_MODEL = "account.AccountModel"
+
+# SMTP
+# See: https://docs.djangoproject.com/en/5.2/topics/email/#obtaining-an-instance-of-an-email-backend
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

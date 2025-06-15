@@ -21,3 +21,6 @@ class UserRepository(ABC):
 
     @abstractmethod
     def change_password(self, user_id: int, new_raw_password: str) -> None: ...
+
+    @abstractmethod
+    def delete(self, user_id: int) -> None: ...

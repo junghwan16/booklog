@@ -4,11 +4,30 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpRequest
 from apps.account.adapters.inbound.web.forms.auth_forms import LoginForm
+from apps.account.adapters.outbound.security.django_session_manager import (
+    DjangoSessionManager,
+)
+from apps.account.adapters.outbound.security.django_authenticator import (
+    DjangoAuthenticator,
+)
+from apps.account.adapters.outbound.persistence.django_user_repo import (
+    DjangoUserRepository,
+)
 from apps.account.application.ports.inbound.authenticate_user import (
     AuthenticateUserCommand,
 )
-from apps.account.application import containers as containers
+from apps.account.application.services.auth_service import (
+    AuthenticateUserService,
+    LogoutUserService,
+)
 from apps.account.domain.exceptions import InvalidCredentials
+
+
+_session_manager = DjangoSessionManager()
+_user_repo = DjangoUserRepository()
+_authenticator = DjangoAuthenticator(user_repo=_user_repo)
+_auth_service = AuthenticateUserService(authenticator=_authenticator)
+_logout_service = LogoutUserService(session_manager=_session_manager)
 
 
 def login_view(request: HttpRequest):
@@ -21,7 +40,13 @@ def login_view(request: HttpRequest):
                 password=form.cleaned_data["password"],
             )
             try:
-                containers.auth_service.execute(cmd, request)
+                account = _auth_service.execute(cmd)
+                # Login must happen before we can access request.user
+                _session_manager.login(request, account.id)
+
+                if not account.is_email_verified:
+                    return redirect("verification_required")
+
                 return redirect(next_url)
             except InvalidCredentials:
                 messages.error(request, "이메일 또는 비밀번호가 올바르지 않습니다.")
@@ -31,6 +56,6 @@ def login_view(request: HttpRequest):
 
 
 def logout_view(request: HttpRequest):
-    containers.logout_service.execute(request)
+    _logout_service.execute(request)
     messages.info(request, "로그아웃되었습니다.")
     return redirect("home")

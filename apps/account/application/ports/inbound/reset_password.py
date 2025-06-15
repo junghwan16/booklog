@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class ResetPasswordCommand:
+    user_id: int
     token: str
     new_password: str
 

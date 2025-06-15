@@ -47,7 +47,7 @@ class RequestPasswordResetService(RequestPasswordResetUseCase):
             # Should not happen for an existing account
             return
         token = self.token_repo.issue(acc.id, purpose="pwd_reset", ttl_sec=60 * 60)
-        self.email_sender.send_password_reset(acc.email, token)
+        self.email_sender.send_password_reset(acc.email, str(acc.id), token)
 
 
 class ResetPasswordService(ResetPasswordUseCase):
@@ -60,13 +60,15 @@ class ResetPasswordService(ResetPasswordUseCase):
         self.token_repo = token_repo
 
     def execute(self, cmd: ResetPasswordCommand) -> None:
-        user_id = self.token_repo.consume(cmd.token, purpose="pwd_reset")
-        if user_id is None:
-            raise InvalidTokenError()
-
-        # Check if user exists before changing password
-        user = self.user_repo.find_by_id(user_id)
+        # 1. Check if user exists first.
+        user = self.user_repo.find_by_id(cmd.user_id)
         if user is None:
             raise InvalidTokenError()
 
-        self.user_repo.change_password(user_id, cmd.new_password)
+        # 2. Consume token and verify it belongs to the user.
+        token_user_id = self.token_repo.consume(cmd.token, purpose="pwd_reset")
+        if token_user_id is None or token_user_id != cmd.user_id:
+            raise InvalidTokenError()
+
+        # 3. Change password
+        self.user_repo.change_password(cmd.user_id, cmd.new_password)

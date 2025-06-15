@@ -5,8 +5,6 @@ User = get_user_model()
 
 
 class DjangoSessionManager(SessionManagerPort):
-    """Django session management using the active User model"""
-
     def login(self, request, user_id: int):
         user = User.objects.get(id=user_id)
         _login(request, user)

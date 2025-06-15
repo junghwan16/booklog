@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}회원 탈퇴{% endblock %}
+
+{% block content %}
+<h2>회원 탈퇴</h2>
+
+<h3>주의사항</h3>
+<ul>
+    <li>계정을 삭제하면 <strong>모든 데이터가 영구적으로 삭제</strong>됩니다.</li>
+    <li>삭제된 계정은 <strong>복구할 수 없습니다</strong>.</li>
+    <li>동일한 이메일로 다시 가입할 수 있지만, 기존 데이터는 복구되지 않습니다.</li>
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <p>
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {% if form.password.help_text %}
+            <br><small>{{ form.password.help_text }}</small>
+        {% endif %}
+        {% if form.password.errors %}
+            <br><strong>{{ form.password.errors }}</strong>
+        {% endif %}
+    </p>
+    
+    <p>
+        {{ form.confirm_deletion }}
+        {{ form.confirm_deletion.label_tag }}
+        {% if form.confirm_deletion.help_text %}
+            <br><small>{{ form.confirm_deletion.help_text }}</small>
+        {% endif %}
+        {% if form.confirm_deletion.errors %}
+            <br><strong>{{ form.confirm_deletion.errors }}</strong>
+        {% endif %}
+    </p>
+    
+    <p>
+        <button type="submit">계정 삭제</button>
+        <a href="{% url 'profile' %}">취소</a>
+    </p>
+</form>
+{% endblock %} 

@@ -15,5 +15,9 @@ class InvalidTokenError(AccountError):
     pass
 
 
+class UserNotFoundError(AccountError):
+    pass
+
+
 class NotFoundError(AccountError):
     pass
