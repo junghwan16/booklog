@@ -9,7 +9,7 @@ class GetBookMemosQuery:
     """Query to get memos for a specific book."""
 
     user_id: str
-    book_id: str
+    user_book_id: str
 
 
 class GetBookMemosUseCase(ABC):

@@ -21,24 +21,24 @@ class AddMemoService(AddMemoUseCase):
         # Command validation is handled in __post_init__
 
         # 비즈니스 검증: 책이 존재하고 사용자 소유인지 확인
-        user_book = self._user_book_repo.get_by_id(cmd.book_id)
+        user_book = self._user_book_repo.get_by_id(cmd.user_book_id)
         if not user_book:
-            raise BookNotFoundError(cmd.book_id)
+            raise BookNotFoundError(cmd.user_book_id)
 
         if user_book.user_id != cmd.user_id:
-            raise UnauthorizedBookAccessError(cmd.user_id, cmd.book_id)
+            raise UnauthorizedBookAccessError(cmd.user_id, cmd.user_book_id)
 
         # 비즈니스 검증: 페이지 번호가 총 페이지를 초과할 수 없음
-        if cmd.page_number > user_book.total_pages:
+        if cmd.page > user_book.total_pages:
             raise InvalidMemoDataError(
                 "페이지 번호가 총 페이지 수를 초과할 수 없습니다."
             )
 
         memo = Memo(
+            user_book_id=cmd.user_book_id,
             user_id=cmd.user_id,
-            book_id=cmd.book_id,
             content=cmd.content.strip(),
-            page_number=cmd.page_number,
+            page=cmd.page,
         )
 
         saved_memo = self._memo_repo.save(memo)

@@ -79,7 +79,7 @@ class StartReadingForm(forms.Form):
 class AddMemoForm(forms.Form):
     """Form for adding a memo to a book."""
 
-    book_id = forms.CharField(widget=forms.HiddenInput())
+    user_book_id = forms.CharField(widget=forms.HiddenInput())
 
     content = forms.CharField(
         label="메모 내용",
@@ -92,7 +92,7 @@ class AddMemoForm(forms.Form):
         ),
     )
 
-    page_number = forms.IntegerField(
+    page = forms.IntegerField(
         min_value=0,
         label="페이지 번호",
         widget=forms.NumberInput(

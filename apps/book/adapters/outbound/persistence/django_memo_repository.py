@@ -13,7 +13,7 @@ class DjangoMemoRepository(MemoRepository):
             try:
                 memo_model = MemoModel.objects.get(id=memo.id)
                 memo_model.content = memo.content
-                memo_model.page_number = memo.page_number
+                memo_model.page = memo.page
                 memo_model.save()
             except MemoModel.DoesNotExist:
                 raise ValueError("메모를 찾을 수 없습니다.")
@@ -23,9 +23,9 @@ class DjangoMemoRepository(MemoRepository):
             memo_model = MemoModel.objects.create(
                 id=memo.id,
                 user_id=memo.user_id,
-                book_id=memo.book_id,
+                user_book_id=memo.user_book_id,
                 content=memo.content,
-                page_number=memo.page_number,
+                page=memo.page,
             )
 
         return self._to_entity(memo_model)
@@ -38,8 +38,8 @@ class DjangoMemoRepository(MemoRepository):
             return None
 
     def get_by_book_id(self, book_id: str) -> List[Memo]:
-        memo_models = MemoModel.objects.filter(book_id=book_id).order_by(
-            "page_number", "created_at"
+        memo_models = MemoModel.objects.filter(user_book_id=book_id).order_by(
+            "page", "created_at"
         )
         return [self._to_entity(model) for model in memo_models]
 
@@ -48,10 +48,11 @@ class DjangoMemoRepository(MemoRepository):
 
     def _to_entity(self, model: MemoModel) -> Memo:
         return Memo(
-            id=model.id,
-            user_id=model.user_id,
-            book_id=model.book_id,
+            user_book_id=str(model.user_book_id),
+            user_id=str(model.user_id),
             content=model.content,
-            page_number=model.page_number,
+            page=model.page,
+            id=model.id,
             created_at=model.created_at,
+            updated_at=model.updated_at,
         )
